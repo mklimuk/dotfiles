@@ -16,7 +16,7 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 export EDITOR=nvim
-export PATH=$PATH:/home/michal/.local/bin
+export PATH=$PATH:/home/michal/.local/bin:/home/michal/.fzf/bin
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
   eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/config.toml)"
@@ -33,10 +33,10 @@ zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::ubuntu
-zinit snippet OMZP::chezmoi
-zinit snippet OMZP::docker
+#zinit snippet OMZP::chezmoi
+#zinit snippet OMZP::docker
 zinit snippet OMZP::docker-compose
-zinit snippet OMZP::gh
+#zinit snippet OMZP::gh
 zinit snippet OMZP::golang
 zinit snippet OMZP::command-not-found
 
@@ -82,4 +82,3 @@ alias c='clear'
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-
