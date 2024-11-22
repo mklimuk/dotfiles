@@ -1,8 +1,3 @@
-if [[ -f "/opt/homebrew/bin/brew" ]] then
-  # If you're using macOS, you'll want this enabled
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -15,11 +10,13 @@ fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-export EDITOR=nvim
-export PATH=$PATH:/home/michal/.local/bin:/home/michal/.fzf/bin
+# Initialize golang environment (must run before path export as it sets $GOROOT and $GOPATH
+eval $(go env)
+
+export PATH=$PATH:$$GOPATH/bin:$GOROOT/bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.fzf/bin:$HOME/.atuin/bin
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/config.toml)"
+  eval "$(oh-my-posh init zsh --config $HOME/.cache/oh-my-posh/themes/catppuccin.omp.json)"
 fi
 
 # Add in zsh plugins
@@ -31,12 +28,7 @@ zinit light Aloxaf/fzf-tab
 # Add in snippets
 zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
-zinit snippet OMZP::sudo
 zinit snippet OMZP::ubuntu
-#zinit snippet OMZP::chezmoi
-#zinit snippet OMZP::docker
-zinit snippet OMZP::docker-compose
-#zinit snippet OMZP::gh
 zinit snippet OMZP::golang
 zinit snippet OMZP::command-not-found
 
@@ -52,6 +44,7 @@ bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
 
 # History
+
 HISTSIZE=5000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
@@ -64,14 +57,23 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-# Completion styling
+# completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# Aliases
+# env vars
+export EDITOR=nvim
+export LANG="en_US.UTF-8"
+export MAGEFILE_ENABLE_COLOR=1
+export MAGEFILE_TARGET_COLOR=White
+
+go env -w GOPROXY="https://goproxy.io,direct"
+go env -w GOPRIVATE="github.com/gophertribe/*,github.com/mklimuk/*"
+
+# aliases
 alias ls='eza'
 alias tree='eza --tree'
 alias vi='nvim'
@@ -79,6 +81,38 @@ alias vim='nvim'
 alias c='clear'
 
 
-# Shell integrations
+# shell integrations
+if command -v brew > /dev/null; then
+  eval "$(brew shellenv)"
+fi
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+eval "$(atuin init zsh)"
+
+ZSH_CUSTOM=$HOME/.zsh_custom
+
+# os custom imports
+if [[ $(uname) == "Darwin" ]]; then
+    source "$ZSH_CUSTOM"/macos.zsh
+
+elif command -v apt > /dev/null; then
+    source "$ZSH_CUSTOM"/debian.zsh
+
+else
+    echo 'Unknown OS!'
+fi
+
+# command specific imports
+if command -v systemctl > /dev/null; then
+    source "$ZSH_CUSTOM"/systemd.zsh
+fi
+
+# kubernetes settings
+if command -v kubectl > /dev/null; then
+    source "$ZSH_CUSTOM"/kubernetes.zsh
+fi
+
+# print fastfetch info if available
+if command -v fastfetch > /dev/null; then
+   fastfetch
+fi
