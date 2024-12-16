@@ -109,6 +109,19 @@ else
     echo 'Unknown OS!'
 fi
 
+if command -v go > /dev/null; then
+    # golang
+    go env -w GOPROXY="https://goproxy.io,direct"
+    go env -w GOPRIVATE="github.com/gophertribe/*,github.com/mklimuk/*"
+
+    #export GOCACHE="$XDG_CACHE_HOME/go-build"
+    export MAGEFILE_ENABLE_COLOR=1
+    export MAGEFILE_TARGET_COLOR=White
+
+    GOBIN="$(go env GOPATH)/bin:$(go env GOROOT)/bin"
+    export PATH=$PATH:$GOBIN
+fi
+
 # command specific imports
 if command -v systemctl > /dev/null; then
     source "$ZDOTDIR"/systemd.zsh
@@ -121,7 +134,7 @@ fi
 
 # print fastfetch info if available
 if command -v fastfetch > /dev/null; then
-    if [ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]; then
+    if [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" && "$CHEZMOI_SUBSHELL" != "1" ]]; then
       fastfetch
     fi
 fi
