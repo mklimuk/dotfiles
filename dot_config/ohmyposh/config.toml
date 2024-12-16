@@ -2,6 +2,16 @@ console_title_template = '{{ .Shell }} in {{ .Folder }}'
 version = 3
 final_space = true
 
+[palette]
+  blue = '#769ff0'
+  lavender = '#B7BDF8'
+  os = '#ACB0BE'
+  pink = '#F5BDE6'
+  text = '#494D64'
+  grey = '#a3aed2'
+  wight = '#FFFFFF'
+  black = '#323232'
+
 [secondary_prompt]
   template = '❯❯ '
   foreground = 'magenta'
@@ -15,58 +25,53 @@ final_space = true
 [[blocks]]
   type = 'prompt'
   alignment = 'left'
-  newline = true
 
   [[blocks.segments]]
-    template = '{{ .Path }}'
-    foreground = 'blue'
-    background = 'transparent'
+    leading_diamond = '░▒▓'
+    trailing_diamond = ''
+    template = ' {{.Icon}} '
+    foreground = 'p:black'
+    background = 'p:grey'
+    type = 'os'
+    style = 'diamond'
+
+  [[blocks.segments]]
+    template = '{{ .UserName }}@{{ .HostName }}'
+    foreground = 'p:text'
+    powerline_symbol = ''
+    background = 'p:pink'
+    type = 'session'
+    style = 'diamond'
+
+  [[blocks.segments]]
+    template = ' {{ .Path }}'
+    foreground = 'p:text'
+    powerline_symbol = ''
+    background = 'p:blue'
     type = 'path'
-    style = 'plain'
+    style = 'powerline'
 
     [blocks.segments.properties]
-      cache_duration = 'none'
-      style = 'full'
+      folder_icon = '....'
+      home_icon = '~'
+      style = 'agnoster_short'
 
   [[blocks.segments]]
-    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
-    foreground = 'p:grey'
-    background = 'transparent'
+    template = ' {{ .HEAD }}'
+    foreground = 'p:text'
+    powerline_symbol = ''
+    background = 'p:lavender'
     type = 'git'
-    style = 'plain'
+    style = 'powerline'
 
     [blocks.segments.properties]
-      branch_icon = ''
-      cache_duration = 'none'
-      commit_icon = '@'
-      fetch_status = true
-
-[[blocks]]
-  type = 'rprompt'
-  overflow = 'hidden'
-
-  [[blocks.segments]]
-    template = '{{ .FormattedMs }}'
-    foreground = 'yellow'
-    background = 'transparent'
-    type = 'executiontime'
-    style = 'plain'
-
-    [blocks.segments.properties]
-      cache_duration = 'none'
-      threshold = 5000
-
-[[blocks]]
-  type = 'prompt'
-  alignment = 'left'
-  newline = true
-
-  [[blocks.segments]]
-    template = '❯'
-    background = 'transparent'
-    type = 'text'
-    style = 'plain'
-    foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
-
-    [blocks.segments.properties]
-      cache_duration = 'none'
+      branch_icon = ' '
+      cherry_pick_icon = ' '
+      commit_icon = ' '
+      fetch_status = false
+      fetch_upstream_icon = false
+      merge_icon = ' '
+      no_commits_icon = ' '
+      rebase_icon = ' '
+      revert_icon = ' '
+      tag_icon = ' '

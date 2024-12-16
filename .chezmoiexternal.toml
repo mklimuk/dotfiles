@@ -1,0 +1,13 @@
+[".config/vim"]
+    type = "git-repo"
+    url = "https://github.com/mklimuk/nvim-config.git"
+    refreshPeriod = "168h"
+
+{{ $zjstatusVersion := "v0.19.1" -}}
+[".config/zellij/plugins/zjstatus.wasm"]
+    type = "file"
+    url = "https://github.com/dj95/zjstatus/releases/download/{{ $zjstatus }}/zjstatus.wasm"
+
+[".config/zellij/plugins/zjframes.wasm"]
+    type = "file"
+    url = "https://github.com/dj95/zjstatus/releases/download/{{ $zjstatus }}/zjframes.wasm"

@@ -1,0 +1,127 @@
+# Download Zinit, if it's not there yet
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+# Source/Load zinit
+source "${ZINIT_HOME}/zinit.zsh"
+
+# prompt
+#eval "$(starship init zsh)"
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/config.toml)"
+fi
+
+# install zsh plugins using zinit turbo mode
+# fzf-tab adds an fzf based completion menu
+zinit wait lucid light-mode for \
+  atinit"zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+      Aloxaf/fzf-tab \
+  atload"_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions \
+  blockf atpull'zinit creinstall -q .' \
+      zsh-users/zsh-completions
+
+# snippets
+zinit snippet OMZL::git.zsh                 # this is necessary if we want to use oh-my-zsh plugins
+zinit snippet OMZP::git                     # git plugin (TODO: select aliases I really want to use)
+zinit snippet OMZP::ubuntu                  # TODO: move to linux and filter out stuff I really want
+zinit snippet OMZP::golang
+zinit snippet OMZP::command-not-found       # this proposes packages that contain the command that was not found
+
+# Load completions
+autoload -Uz compinit && compinit
+
+zinit cdreplay -q
+
+# navigation options
+setopt AUTO_CD              # go to folder path without using cd
+setopt AUTO_PUSHD           # push the old directory onto the stack on cd
+setopt PUSHD_IGNORE_DUPS    # do not store duplicates in the stack
+setopt PUSHD_SILENT         # do not print the directory stack after pushd or popd
+setopt CORRECT              # apelling correction
+setopt CDABLE_VARS          # change directory to a path stored in a variable
+setopt EXTENDED_GLOB        # use extended globbing syntax
+
+# history options
+setopt APPEND_HISTORY            # this appends history file instead of replacing; allows all session to share history
+setopt EXTENDED_HISTORY          # write the history file in the ':start:elapsed;command' format
+setopt SHARE_HISTORY             # share history between all sessions
+setopt HIST_EXPIRE_DUPS_FIRST    # expire a duplicate event first when trimming history
+setopt HIST_IGNORE_DUPS          # do not record an event that was just recorded again
+setopt HIST_IGNORE_ALL_DUPS      # delete an old recorded event if a new event is a duplicate
+setopt HIST_FIND_NO_DUPS         # do not display a previously found event
+setopt HIST_IGNORE_SPACE         # do not record an event starting with a space
+setopt HIST_SAVE_NO_DUPS         # do not write a duplicate event to the history file
+setopt HIST_VERIFY               # do not execute immediately upon history expansion
+
+# aliases
+source "$ZDOTDIR"/aliases.zsh
+
+function _new_command {
+    zle push-input
+    BUFFER=""
+}
+
+zle -N _new_command
+bindkey -M vicmd '^n' _new_command
+
+# Vi mode
+bindkey -v
+export KEYTIMEOUT=1
+
+# Change cursor
+source "$ZDOTDIR"/plugins/cursor_mode
+
+# Keybindings
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+bindkey '^[w' kill-region
+
+# completion
+source "$ZDOTDIR"/completion.zsh
+
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd '^v' edit-command-line
+
+# macbook keyboard home
+bindkey  '^[[H'   .beginning-of-line
+bindkey  '^[[F'   .end-of-line
+
+# shell integrations
+if command -v brew > /dev/null; then
+  eval "$(brew shellenv)"
+fi
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
+# TODO: figure out the way to use atuin
+#eval "$(atuin init zsh)"
+
+# os custom imports
+if [[ $(uname) == "Darwin" ]]; then
+    source "$ZDOTDIR"/macos.zsh
+elif command -v apt > /dev/null; then
+    source "$ZDOTDIR"/linux.zsh
+else
+    echo 'Unknown OS!'
+fi
+
+# command specific imports
+if command -v systemctl > /dev/null; then
+    source "$ZDOTDIR"/systemd.zsh
+fi
+
+# kubernetes settings
+if command -v kubectl > /dev/null; then
+    source "$ZDOTDIR"/kubernetes.zsh
+fi
+
+# print fastfetch info if available
+if command -v fastfetch > /dev/null; then
+    if [ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" ]; then
+      fastfetch
+    fi
+fi
