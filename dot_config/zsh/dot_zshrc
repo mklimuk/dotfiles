@@ -57,6 +57,9 @@ setopt HIST_IGNORE_SPACE         # do not record an event starting with a space
 setopt HIST_SAVE_NO_DUPS         # do not write a duplicate event to the history file
 setopt HIST_VERIFY               # do not execute immediately upon history expansion
 
+# moved here because it was overriden when put in .zshenv
+export HISTFILE=$HOME/.zsh_history
+
 # aliases
 source "$ZDOTDIR"/aliases.zsh
 
