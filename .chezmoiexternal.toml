@@ -11,3 +11,8 @@
 [".config/zellij/plugins/zjframes.wasm"]
     type = "file"
     url = "https://github.com/dj95/zjstatus/releases/download/{{ $zjstatusVersion }}/zjframes.wasm"
+
+[".local/bin/oh-my-posh"]
+    type = "file"
+    url = "https://cdn.ohmyposh.dev/releases/latest/posh-{{ .chezmoi.os }}-{{ .chezmoi.arch }}"
+    

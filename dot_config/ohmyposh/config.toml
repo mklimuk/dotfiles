@@ -43,8 +43,8 @@ final_space = true
     style = 'diamond'
 
   [[blocks.segments]]
-    template = ' {{ .HostName }}'
-    foreground = 'p:light'
+    template = ' {{ .HostName }} '
+    foreground = 'p:grey800'
     powerline_symbol = ''
     background = 'p:dark'
     type = 'session'
