@@ -1,3 +1,7 @@
+#!/usr/bin/env zsh
+#
+fpath=($ZDOTDIR/plugins $fpath)
+
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
    mkdir -p "$(dirname $ZINIT_HOME)"
@@ -19,6 +23,8 @@ zinit wait lucid light-mode for \
   atinit"zicompinit; zicdreplay" \
       zdharma-continuum/fast-syntax-highlighting \
       Aloxaf/fzf-tab \
+      Tarrasch/zsh-bd \
+      peterhurford/git-it-on.zsh \
   atload"_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions \
   blockf atpull'zinit creinstall -q .' \
@@ -63,6 +69,20 @@ export HISTFILE=$HOME/.zsh_history
 # aliases
 source "$ZDOTDIR"/aliases.zsh
 
+# utility scripts
+source "$ZDOTDIR"/scripts.zsh
+
+# Vi mode
+bindkey -v
+export KEYTIMEOUT=1
+
+# Change cursor
+# WARNING: Cursor mode breaks transient prompt in oh-my-posh
+source "$ZDOTDIR"/plugins/cursor_mode
+
+# completion
+source "$ZDOTDIR"/completion.zsh
+
 function _new_command {
     zle push-input
     BUFFER=""
@@ -71,24 +91,14 @@ function _new_command {
 zle -N _new_command
 bindkey -M vicmd '^n' _new_command
 
-# Vi mode
-bindkey -v
-export KEYTIMEOUT=1
-
-# Change cursor
-source "$ZDOTDIR"/plugins/cursor_mode
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd '^v' edit-command-line
 
 # Keybindings
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
-
-# completion
-source "$ZDOTDIR"/completion.zsh
-
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd '^v' edit-command-line
 
 # macbook keyboard home
 bindkey  '^[[H'   .beginning-of-line
@@ -133,11 +143,4 @@ fi
 # kubernetes settings
 if command -v kubectl > /dev/null; then
     source "$ZDOTDIR"/kubernetes.zsh
-fi
-
-# print fastfetch info if available
-if command -v fastfetch > /dev/null; then
-    if [[ "$TERMINAL_EMULATOR" != "JetBrains-JediTerm" && "$CHEZMOI_SUBSHELL" != "1" ]]; then
-      fastfetch
-    fi
 fi

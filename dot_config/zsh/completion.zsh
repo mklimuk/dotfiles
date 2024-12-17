@@ -69,13 +69,21 @@ zstyle ':completion:*' file-sort modification
 
 zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 # this is fzf-tab specific
-zstyle ':completion:*:descriptions' format '[%D %d]'
+zstyle ':completion:*:descriptions' format '[%d]'
 #zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
 zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
 # zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 # colors for files and directory
-zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
+# The command dircolors is specific to GNU coreutils, so you'll find it on non-embedded Linux and on Cygwin but not on other unix systems such as OSX (https://unix.stackexchange.com/questions/91937/mac-os-x-dircolors-not-found)
+if command -v dircolors >/dev/null; then
+  eval "$(dircolors -b)"
+  zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
+  alias ls='ls --color'
+else
+  export CLICOLOR=1
+  zstyle ':completion:*:*:*:*:default' list-colors ''
+fi
 
 # only display some tags for the command cd
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
