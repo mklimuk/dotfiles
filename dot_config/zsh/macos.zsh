@@ -15,7 +15,11 @@ function os_notification () {
 }
 
 function listening_on() {
-    lsof -nP -i4TCP:"$1" | grep LISTEN
+  lsof -nP -i4TCP:"$1" | grep LISTEN
+}
+
+function ssh_terminfo() {
+  infocmp -x | ssh $1 -- tic -x -
 }
 
 function pfx_to_jks() {
@@ -93,9 +97,20 @@ function satsys() {
       sudo route add 10.131.15.0/24 $CURRENT_IP
       sudo route add 10.131.31.0/24 $CURRENT_IP
       sudo route add 10.231.240.0/24 $CURRENT_IP
+      sudo route add 10.128.78.0/24 $CURRENT_IP
       ;;
     *)
       print "unknown command"
       ;;
   esac
 }
+
+console function () {
+  osascript -e "tell application \"Arc\"
+	tell front window
+		activate
+		make new tab with properties {URL:\"https://${1}:8080/console/\"}
+	end tell
+end tell"
+}
+
