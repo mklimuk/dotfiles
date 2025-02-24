@@ -5,6 +5,7 @@ final_space = true
 [palette]
   blue = '#769ff0'
   grey800 = '#888888'
+  grey600 = '#6a6a6a'
   grey500 = '#394260'
   lavender = '#B7BDF8'
   os = '#ACB0BE'
@@ -20,12 +21,12 @@ final_space = true
   magenta = '#00ff00'
 
 [secondary_prompt]
-  template = '❯❯ '
-  foreground = 'magenta'
+  template = ' >'
+  foreground = 'grey600'
   background = 'transparent'
 
 [transient_prompt]
-  template = '❯ '
+  template = '> '
   background = 'transparent'
   foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
 
@@ -84,7 +85,7 @@ final_space = true
       revert_icon = ' '
       tag_icon = ' '
 
-[[blocks.segments]]
+  [[blocks.segments]]
     type = "time"
     template = "  {{ .CurrentDate | date .Format }} "
     style = "powerline"
@@ -93,3 +94,9 @@ final_space = true
     powerline_symbol = ''
     [blocks.segments.properties]
       time_format = "15:04:05"
+
+  [[blocks.segments]]
+    type = "text"
+    style = "plain"
+    foreground = "p:grey800" 
+    template = "\n >"
