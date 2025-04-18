@@ -98,6 +98,7 @@ function satsys() {
       sudo route add 10.131.31.0/24 $CURRENT_IP
       sudo route add 10.231.240.0/24 $CURRENT_IP
       sudo route add 10.128.78.0/24 $CURRENT_IP
+      sudo route add 10.128.75.0/24 $CURRENT_IP
       ;;
     *)
       print "unknown command"
