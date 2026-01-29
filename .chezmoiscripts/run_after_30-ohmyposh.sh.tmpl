@@ -1,6 +1,10 @@
 {{- if (not .is_ci_workflow) -}}
 #!/usr/bin/env bash
 
+{{ template "shared_script_utils.bash" . }}
+
+header "Installing Oh My Posh"
+
 curl -s https://ohmyposh.dev/install.sh | bash -s
 
 _safeExit_
