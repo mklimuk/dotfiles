@@ -1,0 +1,10 @@
+if command -v go > /dev/null; then
+    # golang
+    go env -w GOPROXY="https://goproxy.io,direct"
+    go env -w GOPRIVATE="github.com/gophertribe/*,github.com/mklimuk/*,github.com/satsysoft/*"
+
+    #export GOCACHE="$XDG_CACHE_HOME/go-build"
+
+    GOBIN="$(go env GOPATH)/bin:$(go env GOROOT)/bin"
+    export PATH=$PATH:$GOBIN
+fi

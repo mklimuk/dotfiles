@@ -3,23 +3,8 @@
     url = "https://github.com/mklimuk/nvim-config.git"
     refreshPeriod = "168h"
 
-{{ $zjstatusVersion := "v0.19.1" -}}
-[".config/zellij/plugins/zjstatus.wasm"]
-    type = "file"
-    url = "https://github.com/dj95/zjstatus/releases/download/{{ $zjstatusVersion }}/zjstatus.wasm"
+[".local/share/zsh/completions/_eza"]
+    refreshPeriod = "168h"
+    type          = "file"
+    url           = "https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza"
 
-[".config/zellij/plugins/zjframes.wasm"]
-    type = "file"
-    url = "https://github.com/dj95/zjstatus/releases/download/{{ $zjstatusVersion }}/zjframes.wasm"
-
-[".local/bin/oh-my-posh"]
-    type = "file"
-    url = "https://cdn.ohmyposh.dev/releases/latest/posh-{{ .chezmoi.os }}-{{ .chezmoi.arch }}"
-
-{{ $fzfVersion := "0.57.0" -}}
-[".local/bin/fzf"]
-    type = "archive-file"
-    url = "https://github.com/junegunn/fzf/releases/download/v{{ $fzfVersion }}/fzf-{{ $fzfVersion }}-{{ .chezmoi.os }}_{{ .chezmoi.arch }}.tar.gz"
-    path = "fzf"
-    
-    

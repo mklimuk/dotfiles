@@ -1,0 +1,7 @@
+[documents]
+    git_stop_words = ""
+
+[secrets]
+    ansible_vault_password       = ""
+    github_personal_access_token = ""
+    homebrew_github_token        = ""

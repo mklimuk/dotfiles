@@ -1,0 +1,17 @@
+alias cp='cp -iv'
+alias grep='grep --color=always'
+alias mkdir='mkdir -pv'
+alias mv='mv -iv'
+alias shfmt="shfmt -ci -bn -i 2"       # dev: Preferred shellformat implementation
+alias visudo="EDITOR=nano sudo visudo" # system: visudo with nano
+
+
+{{- if lookPath "gping" }}
+alias ping="gping"
+{{- else if lookPath "prettyping" }}
+alias ping="prettyping --nolegend"
+{{- end }}
+
+{{- if lookPath "bat" }}
+alias cat="bat" # Prefer `bat` over `cat`
+{{- end }}

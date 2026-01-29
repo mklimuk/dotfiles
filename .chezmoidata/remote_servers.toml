@@ -1,0 +1,7 @@
+[remote_servers]
+
+    [remote_servers.adabot]
+        add_to_ssh_config = false
+        name              = "hdislab"
+        pass_id             = "hdislab"
+        tailscale_ip      = false

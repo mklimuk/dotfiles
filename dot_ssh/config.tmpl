@@ -1,0 +1,57 @@
+{{- if and (eq .chezmoi.os "darwin") (joinPath .chezmoi.homeDir ".orbstack/ssh/config" | lstat) -}}
+# Added by OrbStack: 'orb' SSH host for Linux machines
+# This only works if it's at the top of ssh_config (before any Host blocks).
+# This won't be added again if you remove it.
+Include ~/.orbstack/ssh/config
+{{- end }}
+
+# Create a new key with:
+# ssh-keygen -f [filename] -t ed25519 -C "[comment]"
+# ssh-keygen -f [filename] -t rsa -b 4096 -C "[comment]"
+
+# ##### Chezmoi Managed #############
+{{- if .use_secrets}}
+{{- range .remote_servers }}
+{{-     if .add_to_ssh_config }}
+{{ $fields := (passFields .pass_id) }}
+
+Host {{ .name }}
+    User {{ $fields "user" }}
+    Hostname {{ $fields "hostname" }}
+    Port {{ $fields "port" }}
+    IdentityFile {{ $.directories.ssh_keys_dir | replaceAllRegex "\\${HOME}" "~" }}/{{ .name }}
+    IdentitiesOnly yes
+{{-         if .tailscale_ip}}
+
+Host t{{ .name }}
+    User {{ $fields "user" }}
+    Hostname {{ $fields "tailscale_ip" }}
+    Port {{ $fields "port" }}
+    IdentityFile {{ $.directories.ssh_keys_dir | replaceAllRegex "\\${HOME}" "~" }}/{{ .name }}
+    IdentitiesOnly yes
+{{-         end }}
+{{-     end }}
+{{- end }}
+{{- end }}
+
+# ##### End Chezmoi Managed #############
+
+{{- if (eq .chezmoi.os "darwin") -}}
+Host *
+	IdentityFile ~/.ssh/id_rsa
+	ServerAliveInterval 30
+	ServerAliveCountMax 120
+	StrictHostKeyChecking no
+	Protocol 2
+	IdentitiesOnly yes
+{{- end }}
+
+{{- if (eq .chezmoi.os "linux") -}}
+Host *
+	IdentityFile ~/.ssh/id_ecdsa
+	ServerAliveInterval 30
+	ServerAliveCountMax 120
+	StrictHostKeyChecking no
+	Protocol 2
+	IdentitiesOnly yes
+{{- end }}

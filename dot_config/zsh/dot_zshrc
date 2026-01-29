@@ -33,7 +33,7 @@ zinit wait lucid light-mode for \
 # snippets
 zinit snippet OMZL::git.zsh                 # this is necessary if we want to use oh-my-zsh plugins
 zinit snippet OMZP::git                     # git plugin (TODO: select aliases I really want to use)
-zinit snippet OMZP::ubuntu                  # TODO: move to linux and filter out stuff I really want
+#zinit snippet OMZP::ubuntu                  # TODO: move to linux and filter out stuff I really want
 zinit snippet OMZP::golang
 zinit snippet OMZP::command-not-found       # this proposes packages that contain the command that was not found
 
@@ -72,14 +72,6 @@ source "$ZDOTDIR"/aliases.zsh
 # utility scripts
 source "$ZDOTDIR"/scripts.zsh
 
-# Vi mode
-bindkey -v
-export KEYTIMEOUT=1
-
-# Change cursor
-# WARNING: Cursor mode breaks transient prompt in oh-my-posh
-source "$ZDOTDIR"/plugins/cursor_mode
-
 # completion
 source "$ZDOTDIR"/completion.zsh
 
@@ -89,11 +81,6 @@ function _new_command {
 }
 
 zle -N _new_command
-bindkey -M vicmd '^n' _new_command
-
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd '^v' edit-command-line
 
 # Keybindings
 bindkey '^p' history-search-backward
@@ -104,10 +91,19 @@ bindkey '^[w' kill-region
 bindkey  '^[[H'   .beginning-of-line
 bindkey  '^[[F'   .end-of-line
 
+# PATH setup - prioritize Apple Silicon Homebrew
+# Remove any existing Homebrew paths first, then add Apple Silicon Homebrew at the beginning
+export PATH=$(echo $PATH | tr ':' '\n' | grep -v '/usr/local/bin\|/usr/local/sbin\|/opt/homebrew/bin\|/opt/homebrew/sbin' | tr '\n' ':' | sed 's/:$//')
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.npm-global/bin
+
 # shell integrations
-if command -v brew > /dev/null; then
+# Force Apple Silicon Homebrew for shell environment
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif command -v brew > /dev/null; then
   eval "$(brew shellenv)"
 fi
+
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 # TODO: figure out the way to use atuin
@@ -125,11 +121,9 @@ fi
 if command -v go > /dev/null; then
     # golang
     go env -w GOPROXY="https://goproxy.io,direct"
-    go env -w GOPRIVATE="github.com/gophertribe/*,github.com/mklimuk/*"
+    go env -w GOPRIVATE="github.com/gophertribe/*,github.com/mklimuk/*,github.com/satsysoft/*"
 
     #export GOCACHE="$XDG_CACHE_HOME/go-build"
-    export MAGEFILE_ENABLE_COLOR=1
-    export MAGEFILE_TARGET_COLOR=White
 
     GOBIN="$(go env GOPATH)/bin:$(go env GOROOT)/bin"
     export PATH=$PATH:$GOBIN
