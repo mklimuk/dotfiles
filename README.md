@@ -147,7 +147,7 @@ For other architectures, you'll need to modify the script or install tools manua
 To fix network adapter lag use Intel driver and set:
 
 ```bash
-sudo ethtool -K enp7s0 tx off rx off
+sudo ethtool --set-eee enp7s0 eee off
 ```
 
 To make it permanent add to `/etc/network/interfaces`:
@@ -155,7 +155,7 @@ To make it permanent add to `/etc/network/interfaces`:
 ```bash
 auto enp7s0
 iface enp7s0 inet dhcp
-    ethtool -K enp7s0 tx off rx off
+    post-up /usr/sbin/ethtool --set-eee $IFACE eee off
 ```
 
 Grub setup `/etc/default/grub` (also fixes slow boot with ATA0 error):
