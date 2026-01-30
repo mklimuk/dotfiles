@@ -19,6 +19,7 @@ final_space = true
   black = '#323232'
   red = '#0000ff'
   magenta = '#00ff00'
+  lead = '#BA5A31'
 
 [secondary_prompt]
   template = ' >'
@@ -55,7 +56,7 @@ final_space = true
     template = ' {{ .Path }}'
     foreground = 'p:light'
     powerline_symbol = ''
-    background = 'p:blue'
+    background = 'p:lead'
     type = 'path'
     style = 'powerline'
 
@@ -67,7 +68,7 @@ final_space = true
 
   [[blocks.segments]]
     template = ' {{ .HEAD }} {{if .BranchStatus }} {{ .BranchStatus }}{{ end }}'
-    foreground = 'p:blue'
+    foreground = 'p:lead'
     powerline_symbol = ''
     background = 'p:grey500'
     type = 'git'

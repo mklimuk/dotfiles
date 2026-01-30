@@ -3,6 +3,7 @@
 {{- $homelab_member := promptBoolOnce . "homelab_member" "Is this computer in the homelab? (true/false)" -}}
 {{- $dev_computer := promptBoolOnce . "dev_computer" "Do you do development on this computer? (true/false)" -}}
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $prompt_color := promptStringOnce . "prompt_color" "Prompt color" -}}
 
 [data]
     dev_computer      = {{ $dev_computer }}
@@ -11,6 +12,7 @@
     homelab_member    = {{ $homelab_member }}
     is_ci_workflow    = false # Set true only in CI test
     personal_computer = {{ $personal_computer }}
+    prompt_color      = {{ $prompt_color }}
     use_secrets       = {{ $use_secrets }}
     xdgCacheDir       = "{{ .chezmoi.homeDir }}/.cache"
     xdgConfigDir      = "{{ .chezmoi.homeDir }}/.config"
