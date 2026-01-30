@@ -1,3 +1,5 @@
+{{- if .dev_computer -}}
+
 if command -v go > /dev/null; then
     # golang
     go env -w GOPROXY="https://goproxy.io,direct"
@@ -8,3 +10,5 @@ if command -v go > /dev/null; then
     GOBIN="$(go env GOPATH)/bin:$(go env GOROOT)/bin"
     export PATH=$PATH:$GOBIN
 fi
+
+{{- end}}
