@@ -142,3 +142,30 @@ For other architectures, you'll need to modify the script or install tools manua
 - `dot_config/zsh/dot_zprofile` → becomes `~/.zprofile` on target system
 - `dot_config/ohmyposh/config.toml` → becomes `~/.config/ohmyposh/config.toml` on target system
 
+#### Lex specific
+
+To fix network adapter lag use Intel driver and set:
+
+```bash
+sudo ethtool -K enp7s0 tx off rx off
+```
+
+To make it permanent add to `/etc/network/interfaces`:
+
+```bash
+auto enp7s0
+iface enp7s0 inet dhcp
+    ethtool -K enp7s0 tx off rx off
+```
+
+Grub setup `/etc/default/grub` (also fixes slow boot with ATA0 error):
+
+```bash
+GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3 i915.enable_guc_loading=1 i915.enable_guc_submission=1 libata.force=noncq"
+```
+
+Then run:
+
+```bash
+sudo update-grub
+```
