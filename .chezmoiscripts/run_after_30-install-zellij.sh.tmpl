@@ -1,0 +1,25 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/usr/bin/env bash
+
+{{ template "shared_script_utils.bash" . }}
+
+if [[ ! $(command -v zellij) ]]; then
+    arch=$(uname -m)
+
+    filename="zellij-${arch}-unknown-linux-musl.tar.gz"
+    url="https://github.com/zellij-org/zellij/releases/latest/download/$filename"
+
+    header "Installing Zellij"
+
+    curl -LO "$url"
+
+    tar xf "$filename"
+
+    sudo mv zellij /usr/local/bin
+
+    rm "$filename"
+fi
+
+_safeExit_
+
+{{- end -}}
