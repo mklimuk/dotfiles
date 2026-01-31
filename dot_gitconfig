@@ -1,5 +1,3 @@
-[url "git@github.com:"]
-	insteadOf = https://github.com/
 [user]
 	name = Michal Klimuk
 	email = michal@gophertribe.com
