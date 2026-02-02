@@ -1,6 +1,6 @@
 [user]
-	name = {{ .name }}
-	email = {{ .email }}
+	name = Michal Klimuk
+	email = michal@gophertribe.com
 [pull]
 	rebase = false
 [filter "lfs"]
