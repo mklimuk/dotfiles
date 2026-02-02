@@ -32,7 +32,7 @@
     [packages.apt.dev_computer]
         packages = []
     [packages.apt.homelab_member]
-        packages = ["firmware-misc-nonfree", "ethtool", "lshw", "sysfsutils", "iperf"]
+        packages = ["firmware-misc-nonfree", "ethtool", "lshw", "sysfsutils", "iperf", "libnss3-tools"]
     [packages.apt.personal_computer]
         packages = []
 [packages.homebrew]

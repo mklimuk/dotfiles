@@ -76,3 +76,14 @@
         required_architecture = ""
         systems               = ["linux"]
         version_regex         = ""
+
+    [binaries.mkcert]
+        description           = "A simple tool to create local development certificates"
+        executable_name       = ""
+        install_filter        = ""
+        name                  = "mkcert"
+        remove_from_release   = ""
+        repository            = "FiloSottile/mkcert"
+        required_architecture = ""
+        systems               = ["linux"]
+        version_regex         = ""
