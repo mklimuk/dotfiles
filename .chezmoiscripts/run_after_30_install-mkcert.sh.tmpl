@@ -1,0 +1,16 @@
+{{- if not .is_ci_workflow -}}
+#!/usr/bin/env bash
+
+{{ template "shared_script_utils.bash" . }}
+
+header "Installing mkcert"
+
+if [[ ! $(command -v mkcert) ]]; then
+curl -JLO "https://dl.filippo.io/mkcert/latest?for={{ .chezmoi.os }}/{{ .chezmoi.arch }}"
+    chmod +x mkcert-v*{{ .chezmoi.os }}-{{ .chezmoi.arch }}
+    sudo cp mkcert-v*{{ .chezmoi.os }}-{{ .chezmoi.arch }} /usr/local/bin/mkcert
+fi
+
+_safeExit_
+
+{{- end -}}

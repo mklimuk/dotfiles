@@ -193,7 +193,7 @@ class BinaryUpdater:
         self.remove_from_release = remove_from_release
         self.executable_name = executable_name if executable_name else binary_name
         # Get the latest release information
-        self.latest_version: str = re.search(r"(\d+\.\d+\.\d+)", self.release_info["name"]).group(1)
+        self.latest_version: str = re.search(r"([^-]*\d+\.\d+\.\d+)", self.release_info["name"]).group(1)
         self.is_draft: bool = self.release_info["draft"]
         self.is_prerelease: bool = self.release_info["prerelease"]
         self.assets: list = self.release_info["assets"]
