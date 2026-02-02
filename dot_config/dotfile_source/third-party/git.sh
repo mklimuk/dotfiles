@@ -167,9 +167,9 @@ feature_branch() {
     #       https://gist.github.com/coltenkrauter/3e6a2f71cc6e37b03f227b8c7a8f7825
     # USAGE:  feature_branch <additional_path>
     # Example:
-    #   If $USER is "nlandau" and today is 2024-11-08:
-    #   Running `fb -ud` creates a branch like `feature/nlandau/2024-11-08/1`.
-    #   Running `fb -ud utils package` creates `feature/nlandau/utils-package/2024-11-08/1`.
+    #   If $USER is "mklimuk" and today is 2024-11-08:
+    #   Running `fb -ud` creates a branch like `feature/mklimuk/2024-11-08/1`.
+    #   Running `fb -ud utils package` creates `feature/mklimuk/utils-package/2024-11-08/1`.
 
     local opt
     local OPTIND=1
